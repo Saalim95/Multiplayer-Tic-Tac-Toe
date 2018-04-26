@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tic Tac</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <style>
+        .wrapper {
+            display: grid;
+            grid-column-gap: 1em;
+            grid-row-gap: 1em;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .wrapper > div{
+            padding: 1em;
+            background: rgb(132, 178, 199);
+        }
+        .cell{
+            font-size: 60px;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;                                                                            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div id="1" class="cell" onclick="key_press(this)"></div>
+            <div id="2" class="cell" onclick="key_press(this)"></div>
+            <div id="3" class="cell" onclick="key_press(this)"></div>
+            <div id="4" class="cell" onclick="key_press(this)"></div>
+            <div id="5" class="cell" onclick="key_press(this)"></div>
+            <div id="6" class="cell" onclick="key_press(this)"></div>
+            <div id="7" class="cell" onclick="key_press(this)"></div>
+            <div id="8" class="cell" onclick="key_press(this)"></div>
+            <div id="9" class="cell" onclick="key_press(this)"></div>
+        </div>
+    </div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost:3000')
+    socket.on("renderCell", (obj)=>{
+        let id = obj.id
+        let sign = obj.sign
+        renderKey(id, sign)
+    })
+    function key_press(element){
+        let key = element.id
+        socket.emit('keypress', {cell: key})
+        console.log('%s press %s', socket.id, key)
+    }
+    function renderKey(cell_id, sign){
+        document.getElementById(cell_id).innerHTML = sign
+        console.log("rendered %s", sign)
+    }
+</script>
+</body> 
+</html>
